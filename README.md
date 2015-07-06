@@ -1,1 +1,1 @@
-# ras-generator
+# RaS Generator
