@@ -1,6 +1,5 @@
 import urllib2
 from pymongo import MongoClient
 
-f = urllib2.urlopen('http://coursefinder.utoronto.ca/')
-client = MongoClient()
+url = urllib2.urlopen('http://coursefinder.utoronto.ca/')
 client = MongoClient('localhost', 27017)
