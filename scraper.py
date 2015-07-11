@@ -4,8 +4,17 @@ from pymongo import MongoClient
 from Department import Department
 
 #define constants
-REMOVE_SEARCH_FOR_COURSE_BY_DEPT = 72
-REMOVE_RETURN_FALSE = 21
+TRIM_FRONT = 72
+TRIM_BACK = 21
+
+def parseElements(element):
+	starting_index = element.value.find('searchForCourseByDept') + TRIM_FRONT
+	ending_index = len(element.value) - TRIM_BACK
+	dept_data = element.value[starting_index : ending_index]
+	dept_data = dept_data.replace(',', '')
+	dept_data = dept_data.replace("' '", "|")
+	dept_data = dept_data.replace("''", "|")
+	return dept_data.split('|')
 
 def getHeader(res):
 	return {'Cookie':'kualiSessionId='+str(res.cookies['kualiSessionId'])+';JSESSIONID='+str(res.cookies['JSESSIONID'])}
@@ -18,8 +27,8 @@ def getDepartments(elements):
 	dept_list = []
 	for i in range(0, len(elements)):
 			if 'searchForCourseByDept' in elements[i].value:
-				dept_data = (elements[i].value[elements[i].value.find('searchForCourseByDept') + REMOVE_SEARCH_FOR_COURSE_BY_DEPT:len(elements[i].value) - REMOVE_RETURN_FALSE]).replace(',', '').replace("' '", "|").replace("''", "|").split('|')
-				dept_list.append(Department(dept_data[0], dept_data[1], dept_data[2], dept_data[3]))
+				parsed_elements = parseElements(elements[i])
+				dept_list.append(Department(parsed_elements[0], parsed_elements[1], parsed_elements[2], parsed_elements[3]))
 	return dept_list
 
 def getParams(departments):
