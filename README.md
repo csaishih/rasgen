@@ -11,12 +11,15 @@ $ git clone https://github.com/g3aishih/rasgen.git
 ```
 Make sure you have the following dependencies installed on your machine
 * python 2.x
+```bash
+$ things
+```
 * requests
 * lxml
 * cPickle
 * MongoClient
 
-## How to use - Scraper
+## How to use the scraper
 Go to the directory with `scraper.py` and run:
 ```bash
 $ python scraper.py
