@@ -10,16 +10,16 @@ Clone this repo
 $ git clone https://github.com/g3aishih/rasgen.git
 ```
 Make sure you have the following dependencies installed on your machine
-* python 2.x (v2.7 recommended)
-* requests
+* [python 2.x](https://www.python.org/download/releases/2.7/) (v2.7 recommended)
+* cPickle: Should be included in python2.7
+* [requests](http://docs.python-requests.org/en/latest/user/install/#distribute-pip)
 ```bash
 $ pip install requests
 ```
-* lxml
+* [lxml](http://lxml.de/installation.html)
 ```bash
 $ pip install lxml
 ```
-* cPickle
 * MongoClient
 ```bash
 $ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
