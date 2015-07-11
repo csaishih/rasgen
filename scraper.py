@@ -44,24 +44,30 @@ def getParams(departments):
 
 def getCourse(headers, param):
 	res = requests.get('http://coursefinder.utoronto.ca/course-search/search/courseSearch/course/browseSearch', params=param, headers=headers)
-	courses = res.json()[JSON_OBJECT_NAME]
-	for i in range(0, len(courses)):
-		course = courses[i]
-		starting_index = course[1].index('courseSearch/coursedetails/') + OFFSET_COURSE_LINK
-		ending_index = starting_index + OFFSET_LINK_LENGTH
+	try:
+		courses = res.json()[JSON_OBJECT_NAME]	
+		for i in range(0, len(courses)):
+			course = courses[i]
+			starting_index = course[1].index('courseSearch/coursedetails/') + OFFSET_COURSE_LINK
+			ending_index = starting_index + OFFSET_LINK_LENGTH
 
-		link = course[1][starting_index : ending_index]
-		code = link[:8]
-		title = course[2]
-		credits = course[3]
-		campus = course[4]
-		dept = course[5]
-		year = course[6][:4]
-		semester = link[8]
-		faculty = course[7]
+			link = course[1][starting_index : ending_index]
+			code = link[:8]
+			title = course[2].encode('ascii', 'ignore')
+			credits = course[3]
+			campus = course[4]
+			dept = course[5]
+			year = course[6].split(' ')[0]
+			semester = course[6].split(' ')[1]
+			semester_code = link[8]
+			faculty = course[7]
 
-		print(Course(link, code, title, credits, campus, dept, year, semester, faculty))
-		print('\n')
+			print(Course(link, code, title, credits, campus, dept, year, semester, semester_code, faculty))
+			print('\n')
+			
+	except ValueError:
+		pass
+
 
 def getData():	
 	res = requests.get('http://coursefinder.utoronto.ca/course-search/search/courseSearch?viewId=CourseSearch-FormView&methodToCall=start')
@@ -69,10 +75,8 @@ def getData():
 	elements = getElements(res)
 	departments = getDepartments(elements)
 	params = getParams(departments)
-
-	#for i in range(0, len(params)):
-		#getCourse(headers, params[i])
-	getCourse(headers, params[18])
+	for i in range(0, len(params)):
+		getCourse(headers, params[i])
 
 if __name__ == '__main__':
 	getData()
