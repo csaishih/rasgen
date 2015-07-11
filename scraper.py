@@ -5,12 +5,15 @@ from Department import Department
 from Course import Course
 
 #define constants
-TRIM_FRONT = 72
-TRIM_BACK = 21
+JSON_OBJECT_NAME = "aaData"
+OFFSET_TRIM_FRONT = 72
+OFFSET_TRIM_BACK = 21
+OFFSET_COURSE_LINK = 27
+OFFSET_LINK_LENGTH = 14
 
 def parseElements(element):
-	starting_index = element.value.find('searchForCourseByDept') + TRIM_FRONT
-	ending_index = len(element.value) - TRIM_BACK
+	starting_index = element.value.index('searchForCourseByDept') + OFFSET_TRIM_FRONT
+	ending_index = len(element.value) - OFFSET_TRIM_BACK
 	dept_data = element.value[starting_index : ending_index]
 	dept_data = dept_data.replace(',', '')
 	dept_data = dept_data.replace("' '", "|")
@@ -39,9 +42,26 @@ def getParams(departments):
 		params.append(p)
 	return params
 
-def getCourses(headers, param):
+def getCourse(headers, param):
 	res = requests.get('http://coursefinder.utoronto.ca/course-search/search/courseSearch/course/browseSearch', params=param, headers=headers)
-	print(res.json())
+	courses = res.json()[JSON_OBJECT_NAME]
+	for i in range(0, len(courses)):
+		course = courses[i]
+		starting_index = course[1].index('courseSearch/coursedetails/') + OFFSET_COURSE_LINK
+		ending_index = starting_index + OFFSET_LINK_LENGTH
+
+		link = course[1][starting_index : ending_index]
+		code = link[:8]
+		title = course[2]
+		credits = course[3]
+		campus = course[4]
+		dept = course[5]
+		year = course[6][:4]
+		semester = link[8]
+		faculty = course[7]
+
+		print(Course(link, code, title, credits, campus, dept, year, semester, faculty))
+		print('\n')
 
 def getData():	
 	res = requests.get('http://coursefinder.utoronto.ca/course-search/search/courseSearch?viewId=CourseSearch-FormView&methodToCall=start')
@@ -51,8 +71,8 @@ def getData():
 	params = getParams(departments)
 
 	#for i in range(0, len(params)):
-		#getCourses(headers, params[i])
-	getCourses(headers, params[18])
+		#getCourse(headers, params[i])
+	getCourse(headers, params[18])
 
 if __name__ == '__main__':
 	getData()
