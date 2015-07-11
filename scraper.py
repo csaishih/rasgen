@@ -2,6 +2,7 @@ import requests
 from lxml import html
 from pymongo import MongoClient
 from Department import Department
+from Course import Course
 
 #define constants
 TRIM_FRONT = 72
