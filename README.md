@@ -10,14 +10,31 @@ Clone this repo
 $ git clone https://github.com/g3aishih/rasgen.git
 ```
 Make sure you have the following dependencies installed on your machine
-* python 2.x
-```bash
-$ things
-```
+* python 2.x (v2.7 recommended)
 * requests
+```bash
+$ pip install requests
+```
 * lxml
+```bash
+$ pip install lxml
+```
 * cPickle
 * MongoClient
+```bash
+$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+$ echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+$ sudo apt-get update
+$ sudo apt-get install -y mongodb-org
+```
+To run MongoDB
+```bash
+$ sudo service mongod start
+```
+To stop MongoDB
+```bash
+$ sudo service mongod stop
+```
 
 ## How to use the scraper
 Go to the directory with `scraper.py` and run:
