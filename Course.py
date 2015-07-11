@@ -12,4 +12,4 @@ class Course:
 		self.faculty = faculty
 
 	def __repr__(self):
-		return 'Link: ' + self.link + '\nCode: ' + self.code + '\nTitle: ' + self.title + '\nCredits: ' + self.credits + '\nCampus: ' + self.campus +  '\nDepartment: ' + self.dept + '\nYear: ' + self.year + '\nSemester: ' + self.semester + '\nSemester code: ' + self.semester_code + '\nFaculty: ' + self.faculty
+		return '\nLink: ' + self.link + '\nCode: ' + self.code + '\nTitle: ' + self.title + '\nCredits: ' + self.credits + '\nCampus: ' + self.campus +  '\nDepartment: ' + self.dept + '\nYear: ' + self.year + '\nSemester: ' + self.semester + '\nSemester code: ' + self.semester_code + '\nFaculty: ' + self.faculty

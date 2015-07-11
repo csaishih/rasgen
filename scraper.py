@@ -1,4 +1,5 @@
 import requests
+import cPickle
 from lxml import html
 from pymongo import MongoClient
 from Department import Department
@@ -45,7 +46,8 @@ def getParams(departments):
 def getCourse(headers, param):
 	res = requests.get('http://coursefinder.utoronto.ca/course-search/search/courseSearch/course/browseSearch', params=param, headers=headers)
 	try:
-		courses = res.json()[JSON_OBJECT_NAME]	
+		courses = res.json()[JSON_OBJECT_NAME]
+		course_list = []
 		for i in range(0, len(courses)):
 			course = courses[i]
 			starting_index = course[1].index('courseSearch/coursedetails/') + OFFSET_COURSE_LINK
@@ -62,12 +64,11 @@ def getCourse(headers, param):
 			semester_code = link[8]
 			faculty = course[7]
 
-			print(Course(link, code, title, credits, campus, dept, year, semester, semester_code, faculty))
-			print('\n')
-			
-	except ValueError:
-		pass
+			course_list.append(Course(link, code, title, credits, campus, dept, year, semester, semester_code, faculty))
+		return course_list
 
+	except ValueError:
+		return []
 
 def getData():	
 	res = requests.get('http://coursefinder.utoronto.ca/course-search/search/courseSearch?viewId=CourseSearch-FormView&methodToCall=start')
@@ -75,8 +76,11 @@ def getData():
 	elements = getElements(res)
 	departments = getDepartments(elements)
 	params = getParams(departments)
+	courses = []
 	for i in range(0, len(params)):
-		getCourse(headers, params[i])
+		courses += getCourse(headers, params[i])
+	cPickle.dump(courses, open('data.dat', 'wb'))
+	
 
 if __name__ == '__main__':
 	getData()
