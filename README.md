@@ -12,4 +12,4 @@ Go to the directory with `scraper.py` and run:
 $python scraper.py
 ```
 If `courses.dat` does not exist in your working directory it will be created for you.
-To update `courses.dat` with the most current data from [coursefinder.utoronto.ca](coursefinder.utoronto.ca)
+To update `courses.dat` with the most current data from [coursefinder.utoronto.ca](http://coursefinder.utoronto.ca)
