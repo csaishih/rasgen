@@ -1,5 +1,5 @@
 class Course:
-	def __init__(self, link, code, title, credits, campus, dept, year, semester, semester_code, faculty, courselvl, description, prereq, coreq, exclusion, breadth, flags):
+	def __init__(self, link, code, title, credits, campus, dept, year, semester, semester_code, faculty, courselvl, description, prereq, coreq, exclusion, breadth, apsc, flags):
 		self.link =  link.strip()
 		self.code = code.strip()
 		self.title = title.strip()
@@ -16,8 +16,9 @@ class Course:
 		self.coreq = coreq.strip()
 		self.exclusion = exclusion.strip()
 		self.breadth = breadth.strip()
+		self.apsc = apsc.strip()
 		self.flags = flags
 
 
 	def __repr__(self):
-		return '\nLink: ' + self.link + '\nCode: ' + self.code + '\nTitle: ' + self.title + '\nCredits: ' + self.credits + '\nCampus: ' + self.campus +  '\nDepartment: ' + self.dept + '\nYear: ' + self.year + '\nSemester: ' + self.semester + '\nSemester code: ' + self.semester_code + '\nFaculty: ' + self.faculty + '\nCourse level: ' + self.courselvl + '\nDescription: ' + self.description + '\nPre-requisites: ' + self.prereq + '\nCo-requisites' + self.coreq + '\nExclusion: ' + self.exclusion + '\nBreadth: ' + self.breadth + '\nFlags: ' + str(self.flags)
+		return '\nLink: ' + self.link + '\nCode: ' + self.code + '\nTitle: ' + self.title + '\nCredits: ' + self.credits + '\nCampus: ' + self.campus +  '\nDepartment: ' + self.dept + '\nYear: ' + self.year + '\nSemester: ' + self.semester + '\nSemester code: ' + self.semester_code + '\nFaculty: ' + self.faculty + '\nCourse level: ' + self.courselvl + '\nDescription: ' + self.description + '\nPre-requisites: ' + self.prereq + '\nCo-requisites: ' + self.coreq + '\nExclusion: ' + self.exclusion + '\nBreadth: ' + self.breadth + '\nAPSC electives: ' + self.apsc + '\nFlags: ' + str(self.flags)

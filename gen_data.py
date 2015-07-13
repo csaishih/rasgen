@@ -5,6 +5,8 @@ from pymongo import MongoClient
 from Department import Department
 from Course import Course
 
+from random import randint
+
 #define constants
 JSON_OBJECT_NAME = 'aaData'
 COURSE_LINK_HEADER = 'http://coursefinder.utoronto.ca/course-search/search/courseInquiry?methodToCall=start&viewId=CourseDetails-InquiryView&courseId='
@@ -12,10 +14,15 @@ OFFSET_TRIM_FRONT = 72
 OFFSET_TRIM_BACK = 21
 OFFSET_COURSE_LINK = 27
 OFFSET_LINK_LENGTH = 14
-DESCRIPTION_ID = 'u32'
-PREREQ_ID = 'u50'
-EXCLUSION_ID = 'u68'
-BREADTH_ID = 'u122'
+ID_DESCRIPTION = 'u32'
+ID_PREREQ = 'u50'
+ID_COREQ = 'u59'
+ID_EXCLUSION = 'u68'
+ID_RECOMMENDED_PREP = 'u77'
+ID_UTSC_BREADTH = 'u104'
+ID_UTM_DISTRIBUTION = 'u113'
+ID_BREADTH = 'u122'
+ID_APSC_ELECTIVES = 'u140'
 
 def parseElements(element):
 	starting_index = element.value.index('searchForCourseByDept') + OFFSET_TRIM_FRONT
@@ -50,14 +57,19 @@ def getParams(departments):
 	return params
 
 def getData(res, id):
-	return getElements(res, 'span', 'id', id, '/text()')[0]
+	element = getElements(res, 'span', 'id', id, '/text()')
+	if element:
+		return element[0]
+	else:
+		return ''
 
 def getCourse(headers, param):
 	res = requests.get('http://coursefinder.utoronto.ca/course-search/search/courseSearch/course/browseSearch', params=param, headers=headers)
 	try:
 		courses = res.json()[JSON_OBJECT_NAME]
 		course_list = []
-		for i in range(0, 1):
+		w = randint(0, 3)
+		for i in range(w, w + 1):
 			course = courses[i]
 			starting_index = course[1].index('courseSearch/coursedetails/') + OFFSET_COURSE_LINK
 			ending_index = starting_index + OFFSET_LINK_LENGTH
@@ -78,16 +90,16 @@ def getCourse(headers, param):
 			year = course[6].split(' ')[0]
 			faculty = course[7]
 			courselvl = course[9]
-			description = getData(res, DESCRIPTION_ID)
-			#prereq = getData(res, PREREQ_ID)
-			#exclusion = getData(res, EXCLUSION_ID)
-			#breadth = getData(res, BREADTH_ID)
+			description = getData(res, ID_DESCRIPTION)
+			prereq = getData(res, ID_PREREQ)
+			coreq = getData(res, ID_COREQ)
+			exclusion = getData(res, ID_EXCLUSION)
+			breadth = getData(res, ID_BREADTH)
+			apsc = getData(res, ID_APSC_ELECTIVES)
 			flags = 0
-			#course = Course(link, code, title, credits, campus, dept, year, semester, semester_code, faculty, courselvl, description, prereq, exclusion, breadth, flags)
-			#course_list.append(course)
-			#print(course)
-			print(link)
-			#print(prereq)
+			course = Course(link, code, title, credits, campus, dept, year, semester, semester_code, faculty, courselvl, description, prereq, coreq, exclusion, breadth, apsc, flags)
+			course_list.append(course)
+			print(course)
 		return course_list
 
 	except ValueError:
@@ -102,7 +114,7 @@ def generateData():
 	courses = []
 	#for i in range(0, len(params)):
 		#courses += getCourse(headers, params[i])
-	courses += getCourse(headers, params[97])
+	courses += getCourse(headers, params[randint(0,97)])
 	return courses
 	
 if __name__ == '__main__':
